@@ -5,13 +5,15 @@ import { SignupComponent } from './signup/signup.component';
 import { AuthRoutingModule } from './auth-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    UnauthorizedComponent
   ],
   imports: [
     CommonModule,

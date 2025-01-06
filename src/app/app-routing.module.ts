@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoggedInGuard } from './guards/logged-in.guard';
+import { LoginComponent } from './authentication/login/login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },

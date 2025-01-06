@@ -15,7 +15,13 @@ export class AuthService {
     { email: 'user@example.com', password: 'user123@', role: 'user' },
   ];
 
-  constructor(private toastr: ToastrService) {}
+  constructor(private toastr: ToastrService) {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const user: User = JSON.parse(storedUser);
+      this.userSubject.next(user);
+    }
+  }
 
   login(email: string, password: string) {
     const user = this.users.find(
@@ -23,13 +29,13 @@ export class AuthService {
     );
     if (user) {
       localStorage.setItem('token', 'fake-jwt-token');
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));  // Store user info
       this.userSubject.next(user);
       this.toastr.success('Login successful!');
       return user;
     }
     this.toastr.error('Invalid email or password');
-    return  null;
+    return null;
   }
 
   signup(email: string, password: string): boolean {

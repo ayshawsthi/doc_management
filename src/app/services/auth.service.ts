@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.userSubject.asObservable();
+    
   private users = [
-    { email: 'admin@example.com', password: 'admin123', role: 'admin' },
-    { email: 'user@example.com', password: 'user123', role: 'user' },
+    { email: 'admin@example.com', password: 'admin123@', role: 'admin' },
+    { email: 'user@example.com', password: 'user123@', role: 'user' },
   ];
 
   constructor(private toastr: ToastrService) {}
@@ -19,6 +24,7 @@ export class AuthService {
     if (user) {
       localStorage.setItem('token', 'fake-jwt-token');
       localStorage.setItem('user', JSON.stringify(user));
+      this.userSubject.next(user);
       this.toastr.success('Login successful!');
       return user;
     }
@@ -40,6 +46,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    this.userSubject.next(null);
   }
 
   isLoggedIn(): boolean {

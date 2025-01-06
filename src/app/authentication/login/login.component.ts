@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   errorMessage: string = '';
+  user: any;
 
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService  ) {}
 
@@ -25,7 +26,9 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
     if (this.authService.login(email, password)) {
-      this.router.navigate(['/admin']); // Redirect to homepage
+      this.user = this.authService.login(email, password);
+      console.log(this.user);
+      this.router.navigate(['/users']); // Redirect to homepage
     } else {
       this.loginForm.reset();
     }

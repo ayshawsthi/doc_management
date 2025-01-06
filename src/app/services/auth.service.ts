@@ -12,7 +12,7 @@ export class AuthService {
 
   constructor(private toastr: ToastrService) {}
 
-  login(email: string, password: string): boolean {
+  login(email: string, password: string) {
     const user = this.users.find(
       (u) => u.email === email && u.password === password
     );
@@ -20,10 +20,10 @@ export class AuthService {
       localStorage.setItem('token', 'fake-jwt-token');
       localStorage.setItem('user', JSON.stringify(user));
       this.toastr.success('Login successful!');
-      return true;
+      return user;
     }
     this.toastr.error('Invalid email or password');
-    return false;
+    return  null;
   }
 
   signup(email: string, password: string): boolean {

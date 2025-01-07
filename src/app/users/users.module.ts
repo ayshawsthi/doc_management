@@ -5,6 +5,9 @@ import { AdminComponent } from './admin/admin.component';
 import { HeaderComponent } from './header/header.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { DocListComponent } from './doc-list/doc-list.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AddEditUserComponent } from './add-edit-user/add-edit-user.component';
 
 
 
@@ -13,11 +16,14 @@ import { DocListComponent } from './doc-list/doc-list.component';
     AdminComponent,
     HeaderComponent,
     UserListComponent,
-    DocListComponent
+    DocListComponent,
+    AddEditUserComponent
   ],
   imports: [
     CommonModule,
-    UsersRoutingModule
+    UsersRoutingModule,
+    ReactiveFormsModule,
+    ModalModule.forRoot()
   ]
 })
 export class UsersModule { }

@@ -1,1 +1,51 @@
-<p>user-list works!</p>
+<div class="container-fluid mt-4">
+    <h2 class="text-center">User Management</h2>
+  
+    <!-- Add Button -->
+    <div class="row mb-3">
+      <div class="col d-flex justify-content-between">
+        <button class="btn btn-primary btn-sm" (click)="openAddModal()">Add User</button>
+        <form [formGroup]="searchForm">
+          <div class="input-group input-group-sm">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search by Name or Email"
+              formControlName="searchQuery"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- User Table -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Full Name</th>
+          <th style="width: 30%;">Email</th>
+          <th style="width: 30%;">Role</th>
+          <th style="width: 10%;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+          <td>{{ user.fullName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="openEditModal(user)">
+              Edit
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(user)">
+              Delete
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredUsers.length === 0">
+          <td colspan="4" class="text-center">No users found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

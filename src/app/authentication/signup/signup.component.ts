@@ -23,8 +23,8 @@ export class SignupComponent {
   }
 
   onSignup() {
-    const { email, password } = this.signupForm.value;
-    if (this.authService.signup(email, password)) {
+    const user = this.signupForm.value;
+    if (this.authService.signup(user)) {
       setTimeout(() => this.router.navigate(['/auth/login']), 2000);
     }
   }

@@ -1,0 +1,93 @@
+<div class="modal-header d-flex justify-content-between">
+    <h4 class="modal-title">{{ isEditMode ? 'Edit User' : 'Add User' }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+  
+<div class="modal-body">
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <!-- Full Name -->
+    <div class="form-group mb-3">
+    <label for="fullName" class="form-label">Full Name</label>
+    <input
+        type="text"
+        id="fullName"
+        class="form-control"
+        placeholder="Enter full name"
+        formControlName="fullName"
+        [ngClass]="{ 'is-invalid': isFieldInvalid('fullName') }"
+    />
+    <div class="invalid-feedback" *ngIf="isFieldInvalid('fullName')">
+        Full Name is required.
+    </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input
+        type="email"
+        id="email"
+        class="form-control"
+        placeholder="Enter email address"
+        formControlName="email"
+        [ngClass]="{ 'is-invalid': isFieldInvalid('email') }"
+    />
+    <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+        A valid email is required.
+    </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group mb-3" *ngIf="!isEditMode">
+    <label for="password" class="form-label">Password</label>
+    <input
+        type="password"
+        id="password"
+        class="form-control"
+        placeholder="Enter password"
+        formControlName="password"
+        [ngClass]="{ 'is-invalid': isFieldInvalid('password') }"
+    />
+    <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+        Password is required.
+    </div>
+    </div>
+
+    <!-- Role -->
+    <div class="form-group mb-3">
+    <label for="role" class="form-label">Role</label>
+    <select
+        id="role"
+        class="form-select"
+        formControlName="role"
+        [ngClass]="{ 'is-invalid': isFieldInvalid('role') }"
+    >
+        <option value="" disabled>Select a role</option>
+        <option value="admin">Admin</option>
+        <option value="user">User</option>
+    </select>
+    <div class="invalid-feedback" *ngIf="isFieldInvalid('role')">
+        Role is required.
+    </div>
+    </div>
+</form>
+</div>
+<div class="modal-footer">
+<button
+    type="button"
+    class="btn btn-secondary"
+    (click)="modalRef.hide()"
+>
+    Close
+</button>
+<button
+    type="submit"
+    class="btn btn-primary ml-auto" 
+    [disabled]="userForm.invalid"
+>
+    {{ isEditMode ? 'Save Changes' : 'Add User' }}
+</button>
+</div>
+  

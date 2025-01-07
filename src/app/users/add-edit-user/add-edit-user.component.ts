@@ -34,7 +34,11 @@ export class AddEditUserComponent implements OnInit {
   // Form submission handler
   onSubmit(): void {
     if (this.userForm.valid) {
-      const user = this.userForm.value;
+      const user = {...this.userData, ...this.userForm.value};
+      if(this.userData){
+        user.password = this.userData.password;
+        user.id = this.userData.id;
+      }
       this.onClose.next(user);
       this.modalRef.hide();
     }

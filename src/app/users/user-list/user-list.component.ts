@@ -4,6 +4,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { AddEditUserComponent } from '../add-edit-user/add-edit-user.component';
+import { ToastrService } from 'ngx-toastr';
+import swal from 'sweetalert2';
+
 
 
 @Component({
@@ -17,7 +20,9 @@ export class UserListComponent implements OnInit {
   filteredUsers: User[] = [];
   modalRef?: BsModalRef;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private modalService: BsModalService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private modalService: BsModalService,
+    private toastr: ToastrService
+  ) {
     this.searchForm = this.fb.group({
       searchQuery: [''],
     });
@@ -49,8 +54,14 @@ export class UserListComponent implements OnInit {
       isEditMode: true,
     };
     this.modalRef = this.modalService.show(AddEditUserComponent,{initialState,class:'modal-md'});
-    this.modalRef.content.onClose.subscribe((user:any) => {
-      console.log(user);
+    this.modalRef.content.onClose.subscribe((user:User) => {
+      const userIndex = this.users.findIndex(u => u.id === user.id);
+      if(userIndex > -1){
+        this.users[userIndex] = {...this.users[userIndex],...user};
+        this.filteredUsers = [...this.users];
+        this.authService.setUsers(this.users);
+        this.toastr.success('User Updated Successfully');
+      }
     });
 
   }
@@ -59,13 +70,27 @@ export class UserListComponent implements OnInit {
     const initialState = {
       isEditMode: false,
     };
-    this.modalRef = this.modalService.show(AddEditUserComponent,{initialState,class:'modal-md'})
+    this.modalRef = this.modalService.show(AddEditUserComponent,{initialState,class:'modal-md'});
+    this.modalRef.content.onClose.subscribe((user:User) => {
+      this.users.push({id: this.users.length+1, fullName:user.fullName, email:user.email, password:user.password, role: user.role});
+      this.filteredUsers = [...this.users];
+      this.authService.setUsers(this.users);
+      this.toastr.success('User Added Successfully');
+    })
   }
 
-  onDelete(user: User){
-    if (confirm(`Are you sure you want to delete ${user.fullName}?`)) {
-      this.users = this.users.filter((u) => u.email !== user.email);
-      this.onSearch(this.searchForm.get('searchQuery')?.value || '');
-    }
-  }
+  onDelete(user:User) {
+		swal.fire({
+			title             : 'Are you sure you want to delete ' + user.fullName + ' ?',
+			icon              : 'warning',
+			showCancelButton  : true,
+			confirmButtonText : 'Yes'
+		}).then((input) => {
+			if (input.value) {
+				this.users = this.users.filter(u => u.id !== user.id);
+        this.filteredUsers = [...this.users];
+        this.authService.setUsers(this.users);
+			}
+		});
+	}
 }

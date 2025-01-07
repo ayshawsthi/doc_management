@@ -11,8 +11,8 @@ export class AuthService {
   public currentUser$ = this.userSubject.asObservable();
     
   private users = [
-    { fullName: 'Test Admin', email: 'admin@example.com', password: 'admin123@', role: 'admin' },
-    { fullName: 'Test User', email: 'user@example.com', password: 'user123@', role: 'user' },
+    { id:1, fullName: 'Test Admin', email: 'admin@example.com', password: 'admin123@', role: 'admin' },
+    { id:2, fullName: 'Test User', email: 'user@example.com', password: 'user123@', role: 'user' },
   ];
 
   constructor(private toastr: ToastrService) {
@@ -41,7 +41,7 @@ export class AuthService {
   signup(user: User): boolean {
     const userExists = this.users.some((u) => u.email === user.email);
     if (!userExists) {
-      this.users.push({ fullName:user.fullName, email:user.email, password:user.password, role: 'user' });
+      this.users.push({ id: this.users.length+1, fullName:user.fullName, email:user.email, password:user.password, role: 'user' });
         this.toastr.success('Signup successful! Redirecting to login page');
       return true;
     }
@@ -61,5 +61,9 @@ export class AuthService {
 
   getUsers(): User[] {
     return this.users; // Exposes the users array
+  }
+
+  setUsers(users: User[]) {
+    this.users = users;
   }
 }

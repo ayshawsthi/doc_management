@@ -48,7 +48,11 @@ export class UserListComponent implements OnInit {
       userData: user,
       isEditMode: true,
     };
-    this.modalRef = this.modalService.show(AddEditUserComponent,{initialState,class:'modal-md'})
+    this.modalRef = this.modalService.show(AddEditUserComponent,{initialState,class:'modal-md'});
+    this.modalRef.content.onClose.subscribe((user:any) => {
+      console.log(user);
+    });
+
   }
 
   openAddModal(){

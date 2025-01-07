@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { Subject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 
 @Component({
@@ -9,6 +10,7 @@ import { User } from 'src/app/models/user.model';
   styleUrls: ['./add-edit-user.component.scss'], // Optional if you have styles
 })
 export class AddEditUserComponent implements OnInit {
+  public onClose!: Subject<boolean>;
   @Input() userData: User | null = null; // User data for edit mode
   @Input() isEditMode: boolean = false; // Flag to determine Add or Edit mode
 
@@ -17,7 +19,7 @@ export class AddEditUserComponent implements OnInit {
   constructor(private fb: FormBuilder, public modalRef: BsModalRef) {}
 
   ngOnInit(): void {
-    // Initialize form
+		this.onClose = new Subject();
     this.userForm = this.fb.group({
       fullName: [this.userData?.fullName || '', [Validators.required]],
       email: [this.userData?.email || '', [Validators.required, Validators.email]],
@@ -33,6 +35,7 @@ export class AddEditUserComponent implements OnInit {
   onSubmit(): void {
     if (this.userForm.valid) {
       const user = this.userForm.value;
+      this.onClose.next(user);
       this.modalRef.hide();
     }
   }
